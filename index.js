@@ -15,7 +15,7 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
-        strict: true,
+        strict: false,
         deprecationErrors: true,
     }
 });
@@ -59,6 +59,27 @@ async function run() {
                 res.status(500).json({ message: error.message });
             }
         });
+
+        app.get("/categories", async (req, res) => {
+            try {
+                const categories = await productCollection.distinct("category");
+                res.json(categories);
+            } catch (error) {
+                console.log(error);
+                res.status(500).json({ message: error.message });
+            }
+        });
+
+        app.get("/brands", async (req, res) => {
+            try {
+                const brands = await productCollection.distinct("brand");
+                res.json(brands);
+            } catch (error) {
+                console.log(error);
+                res.status(500).json({ message: error.message });
+            }
+        });
+
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
