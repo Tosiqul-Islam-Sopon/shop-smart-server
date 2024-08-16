@@ -29,17 +29,30 @@ async function run() {
 
         app.get("/products", async (req, res) => {
 
-            const { page = 1, limit = 15, search = '', brand = '' } = req.query;
+            const { page = 1, limit = 15, search = '', brand = '', category = '', priceRange } = req.query;
             const skip = (page - 1) * limit;
 
             const query = {};
-            
+
             if (search) {
                 query.productName = { $regex: search, $options: 'i' };
             }
 
             if (brand) {
                 query.brand = brand;
+            }
+
+            if (category) {
+                query.category = category;
+            }
+
+            if (priceRange) {
+                const [min, max] = priceRange.split('-').map(Number);
+                if (max) {
+                    query.price = { $gte: min, $lte: max };
+                } else {
+                    query.price = { $gte: min };
+                }
             }
 
             try {
