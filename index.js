@@ -28,13 +28,21 @@ async function run() {
         const productCollection = database.collection("products");
 
         app.get("/products", async (req, res) => {
-            const page = parseInt(req.query.page) || 1;
-            const limit = parseInt(req.query.limit); 
+
+            const { page = 1, limit = 15, search = '' } = req.query;
             const skip = (page - 1) * limit;
 
+            const query = {};
+            if (search) {
+                query.productName = { $regex: search, $options: 'i' };
+            }
+
             try {
-                const products = await productCollection.find().skip(skip).limit(limit).toArray();
-                const totalProducts = await productCollection.countDocuments();
+                const products = await productCollection.find(query)
+                    .skip(skip)
+                    .limit(parseInt(limit))
+                    .toArray();
+                const totalProducts = await productCollection.countDocuments(query);
                 const totalPages = Math.ceil(totalProducts / limit);
 
                 res.json({
@@ -47,6 +55,7 @@ async function run() {
                     }
                 });
             } catch (error) {
+                console.log(error);
                 res.status(500).json({ message: error.message });
             }
         });
