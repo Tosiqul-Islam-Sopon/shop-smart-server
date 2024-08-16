@@ -49,7 +49,7 @@ Create a `.env` file in the root directory and add the following:
   ```bash
   DB_USER=your_mongodb_username
   DB_PASS=your_mongodb_password
-   
+
 4. Start the development server:
 
     ```bash
