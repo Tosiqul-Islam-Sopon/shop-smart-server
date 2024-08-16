@@ -44,15 +44,19 @@ The server-side of the "Shop Smart" application is built using Node.js and Expre
    npm install
 
 3. Set up environment variables:
-Create a `.env` file in the root directory and add the following:
 
-  ```bash
-  DB_USER=your_mongodb_username
-  DB_PASS=your_mongodb_password
+   Create a `.env` file in the root directory of the project and add the following environment variables:
+
+   ```bash
+   DB_USER=your_mongodb_username 
+   DB_PASS=your_mongodb_password
 
 4. Start the development server:
 
-    ```bash
-    nodemon index.js
+   Run the following command to start the development server:
 
-5. Your server should now be running on `http://localhost:5000`
+   ```bash
+   nodemon index.js
+
+5. Your server should now be running on `http://localhost:5000`.
+
