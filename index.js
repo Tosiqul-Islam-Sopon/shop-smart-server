@@ -29,12 +29,17 @@ async function run() {
 
         app.get("/products", async (req, res) => {
 
-            const { page = 1, limit = 15, search = '' } = req.query;
+            const { page = 1, limit = 15, search = '', brand = '' } = req.query;
             const skip = (page - 1) * limit;
 
             const query = {};
+            
             if (search) {
                 query.productName = { $regex: search, $options: 'i' };
+            }
+
+            if (brand) {
+                query.brand = brand;
             }
 
             try {
