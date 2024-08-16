@@ -29,7 +29,7 @@ async function run() {
 
         app.get("/products", async (req, res) => {
 
-            const { page = 1, limit = 15, search = '', brand = '', category = '', priceRange } = req.query;
+            const { page = 1, limit = 15, search = '', brand = '', category = '', priceRange = '', sort = '' } = req.query;
             const skip = (page - 1) * limit;
 
             const query = {};
@@ -55,8 +55,18 @@ async function run() {
                 }
             }
 
+            const sortOptions = {};
+            if (sort === 'priceAsc') {
+                sortOptions.price = 1;
+            } else if (sort === 'priceDesc') {
+                sortOptions.price = -1;
+            } else if (sort === 'dateDesc') {
+                sortOptions.creationDateTime = -1;
+            }
+
             try {
                 const products = await productCollection.find(query)
+                    .sort(sortOptions)
                     .skip(skip)
                     .limit(parseInt(limit))
                     .toArray();
